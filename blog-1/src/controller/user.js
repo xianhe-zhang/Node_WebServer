@@ -1,9 +1,14 @@
+const { exec } = require('../db/mysql')
+
+
 const loginCheck = (username, password) => {
-  //先试用假数据
-  if (username === 'mario' && password === '123') {
-    return true
-  } 
-  return false
+    const sql = `
+        select username, realname from users where username = '${username}' 
+        and password = '${password}'
+    `
+    return exec(sql).then(rows => { //select 返回的是一个数组
+        return rows[0] || {}
+    })
 }
 
 module.exports = {
