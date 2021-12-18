@@ -1,9 +1,9 @@
 const { exec, escape } = require('../db/mysql')
 const { genPassword } = require('../utils/cryp')
 
-const login = async (username, password) => {
+const login = (username, password) => {
     username = escape(username)
-
+    
     // 生成加密密码
     password = genPassword(password)
     password = escape(password)
@@ -12,9 +12,9 @@ const login = async (username, password) => {
         select username, realname from users where username=${username} and password=${password}
     `
     // console.log('sql is', sql)
-
-    const rows = await exec(sql)
-    return rows[0] || {}
+    return exec(sql).then(rows => {
+        return rows[0] || {}
+    })
 }
 
 module.exports = {

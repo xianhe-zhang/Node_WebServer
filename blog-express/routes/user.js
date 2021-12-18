@@ -1,33 +1,52 @@
-const router = require('koa-router')()
+var express = require('express');
+var router = express.Router();
 const { login } = require('../controller/user')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 
-router.prefix('/api/user')
+router.post('/login', function(req, res, next) {
+    const { username, password } = req.body
+    const result = login(username, password)
+    return result.then(data => {
+        if (data.username) {
+            // 设置 session
+            req.session.username = data.username
+            req.session.realname = data.realname
 
-router.post('/login', async function (ctx, next) {
-    const { username, password } = ctx.request.body
-    const data = await login(username, password)
-    if (data.username) {
-        // 设置 session
-        ctx.session.username = data.username
-        ctx.session.realname = data.realname
+            res.json(
+                new SuccessModel()
+            )
+            return
+        }
+        res.json(
+            new ErrorModel('登录失败')
+        )
+    })
+});
 
-        ctx.body = new SuccessModel()
-        return
-    }
-    ctx.body = new ErrorModel('登录失败')
-})
-
-// router.get('/session-test', async function (ctx, next) {
-//   if (ctx.session.viewCount == null) {
-//     ctx.session.viewCount = 0
-//   }
-//   ctx.session.viewCount++
-
-//   ctx.body ={
-//     errno: 0,
-//     viewCount: ctx.session.viewCount
-//   }
+// router.get('/login-test', (req, res, next) => {
+//     if (req.session.username) {
+//         res.json({
+//             errno: 0,
+//             msg: '已登录'
+//         })
+//         return
+//     }
+//     res.json({
+//         errno: -1,
+//         msg: '未登录'
+//     })
 // })
 
-module.exports = router
+// router.get('/session-test', (req, res, next) => {
+//     const session = req.session
+//     if (session.viewNum == null) {
+//         session.viewNum = 0
+//     }
+//     session.viewNum++
+
+//     res.json({
+//         viewNum: session.viewNum
+//     })
+// })
+
+module.exports = router;
