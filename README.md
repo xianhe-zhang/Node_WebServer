@@ -6,7 +6,7 @@ This is my Node.js back-end project.
 
 
 The project imitates and develops the back-end excuse of blog, and basically realizes the functions of data storage, login, log, security and so on.   
-**| 该项目模仿开发了博客的后端借口，基本实现了数据存储，登陆，日志，安全等功能。**
+**| 该项目模仿开发了博客的后端接口，基本实现了数据存储，登陆，日志，安全等功能。**
 
 
 ## Project Structure | 项目流程图
